@@ -33,9 +33,9 @@ class LinkCell extends React.Component {
 
 const cache = {};
 let loading = false;
-const AjaxCell = ({rowIndex, col, forceUpdate, ...props}) => {
+const AjaxCell = ({rowIndex, col, data, forceUpdate, ...props}) => {
     let page = 1;
-    let pageSize = 11;
+    let pageSize = data.length;
     let idx = rowIndex;
     if (rowIndex >= pageSize) {
         page = Math.floor(rowIndex / pageSize) + 1;
@@ -45,7 +45,7 @@ const AjaxCell = ({rowIndex, col, forceUpdate, ...props}) => {
         return <Cell>{cache[page][idx][col]}</Cell>
     } else if (!loading) {
         console.log("Loading page " + page);
-        loading = true;     
+        loading = true;
 
         fetch(url).then(function(response) {
             return response.json();
@@ -82,12 +82,12 @@ const ClientsTable = React.createClass({
 
           <Column
             header={<Cell>Nume</Cell>}
-            cell={ <AjaxCell col='name' forceUpdate={this.forceUpdate.bind(this)} /> }
+            cell={ <AjaxCell col='name' data={this.state.clients} forceUpdate={this.forceUpdate.bind(this)} /> }
             width={200}
           />
           <Column
             header={<Cell>Telefon</Cell>}
-            cell={ <AjaxCell col='mobileNumber' forceUpdate={this.forceUpdate.bind(this)} /> }
+            cell={ <AjaxCell col='mobileNumber' data={this.state.clients} forceUpdate={this.forceUpdate.bind(this)} /> }
             width={200}
           />
       </Table>
